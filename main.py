@@ -1,9 +1,19 @@
 import PermanentCalendar 
-from flask import Flask, request, jsonify
+from flask import (
+    Flask,
+    make_response,
+    jsonify,
+    request,
+    send_file,
+    send_from_directory,
+    abort,
+)
+from flask_cors import CORS
 from lunarcalendar import Converter, Solar, Lunar, DateNotExist
 import pandas as pd
 from datetime import datetime
 app = Flask(__name__)
+CORS(app)
 @app.route('/Calendar', methods=['POST'])
 def get_Perpetualcalendar():
     data = request.get_json()
