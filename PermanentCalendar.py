@@ -6,6 +6,8 @@ import pandas as pd
 def is_leap_year(year):
     # Kiểm tra xem một năm có phải là năm nhuận hay không
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+
+
 def get_next_can_chi(year, month, day):
     dic_lucthaphoagiap = {
         1: 'Giáp Tý', 2: 'Ất Sửu', 3: 'Bính Dần', 4: 'Đinh Mão', 5: 'Mậu Thìn', 6: 'Kỷ Tỵ', 7: 'Canh Ngọ', 8: 'Tân Mùi',
@@ -41,6 +43,7 @@ def get_next_can_chi(year, month, day):
     # Lấy ngày Can Chi tiếp theo
     next_can_chi = dic_lucthaphoagiap[next_position]
     return next_can_chi
+    
 #Tính ngày hoàng/ hắc đạo #input là năm, tháng, ngày cần xem
 def goodday(year,month,day): 
  # convert lịch dương sang lịch âm và lấy tháng âm 
@@ -60,16 +63,19 @@ def goodday(year,month,day):
  monthlist = dict(zip(sort_list_from_index(giaplist,startgiapindex),daylist))
  hoangdaoday = tim_gia_tri(monthlist,canchi)
  return hoangdaoday
+    
 def tim_gia_tri(dic,chuoi): 
  for key in dic:
     if key in chuoi:
         return dic[key]
  else : return "nope"
+     
 def sort_list_from_index(lst, index):
     if index >= len(lst):
         return lst
     else:
         return lst[index:] + lst[:index]
+        
 # Hàm tính hoàng đạo theo lục minh khổng giáp #Input (year,month,day)
 def find_day_khongminh(year,month,day):
     solar = Solar(year, month,day)
@@ -88,6 +94,7 @@ def find_day_khongminh(year,month,day):
     index = lucgiapkhongminh.index(daystart)
     index_kiem_tra = (index + ngay_kiem_tra - 1) % len(lucgiapkhongminh)
     return lucgiapkhongminh[index_kiem_tra]
+    
 #Tính Thập nhị trực
 def TwelveBranches(year,month,day):
  tietkhi = get_solar_term(year,month,day)
@@ -117,6 +124,7 @@ def TwelveBranches(year,month,day):
         starttrucindex = trucindex[i]
  trucmonthlist = dict(zip(sort_list_from_index(giaptruclist,starttrucindex),thapnhitruc))
  return tim_gia_tri(trucmonthlist,diachi)
+    
 def get_solar_longitude(year, month, day):
     observer = ephem.Observer()
     observer.lat = '0'  
@@ -127,6 +135,7 @@ def get_solar_longitude(year, month, day):
     sun_longitude = sun.ra
     sun_longitude_deg = math.degrees(sun_longitude)
     return sun_longitude_deg
+#Tính toạ độ mặt trời   
 def get_solar_term(year,month,day):
     solar_longitude_deg = get_solar_longitude(year, month, day)
     adjusted_longitude_deg = solar_longitude_deg  # Điều chỉnh toạ độ mặt trời
@@ -139,6 +148,8 @@ def get_solar_term(year,month,day):
     term_index = int((adjusted_longitude_deg) / 15) % 24 
 
     return terms[term_index]
+
+#Tính ngày nguyệt kỵ
 def NguyetKy(lunarday):
     if lunarday in [5,14,23]:
      return True
@@ -153,6 +164,8 @@ def get_first_word(string):
         return words[0]
     else:
         return ''
+
+#Tính sao thất sát
 def sevenkillstar(year,month,day):
     canyear = get_first_word(tim_nam_can_chi(year))
     if canyear in ['Mậu','Quý']:
@@ -169,6 +182,7 @@ def sevenkillstar(year,month,day):
     if dia_day in listday:
         return True
     else : return False 
+        
 def get_name_day(string):
     # Tách chuỗi bởi khoảng cách đầu tiên
     words = string.split(' ', 1)
