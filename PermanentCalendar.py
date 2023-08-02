@@ -212,7 +212,7 @@ def tim_nam_can_chi(year):
         index = (40 + index_diff) % 60
     return dic_lucthaphoagiap[index]
 def tuoixung(year,month,day):
-    df = pd.read_csv("/Users/oraichain/Downloads/xungtuoi.csv",header = None)
+    df = pd.read_csv('xungtuoi.csv",header = None)
     ngaycanchi = get_next_can_chi(year, month, day)
     result = df.loc[df[1] == ngaycanchi,3].values[0]
     return result
