@@ -3,6 +3,5 @@ Flask-Cors
 pandas
 unidecode
 gevent
-math
 ephem
 lunarcalendar
