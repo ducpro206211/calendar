@@ -51,4 +51,4 @@ def get_Perpetualcalendar():
     return jsonify({'Solarday': solarday_data,'Lunarday': lunarday_data,'Sexagenary_Cycle_Day':canchiday,'Sexagenary_Cycle_Year':canchiyear,'Solarterm Day': tietkhi,'BranchesDay':truc,'ZhugeLiang day':ZhugeLiangday,'Good_day':hoangdaoday,'Chinese_Zodiac_Compatibility':Chinese_Zodiac_Compatibility,'Twenty-Eight Lunar Mansions Day':nhithapbattu,
                    'Goodhour':good_hour,'luckyDirection':{'Tai_than':taithan,'Hy_Than':Hythan},'NguyetKy':NguyetKy,'sevenkillstar':sevenkillstar,'Tam_nuong':tamnuong,'Ly_sao':lysao})
 if __name__ == '__main__':
-    app.run()   
+    app.run(debug=True, host="0.0.0.0", port=9000)   
