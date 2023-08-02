@@ -46,7 +46,9 @@ def get_Perpetualcalendar():
     Hythan = PermanentCalendar.Hythan(year, month, day)
     NguyetKy = PermanentCalendar.NguyetKy(lunarday.day)
     sevenkillstar = PermanentCalendar.sevenkillstar(year, month, day)
+    lysao = PermanentCalendar.sevenkillstar(year, month, day)
+    tamnuong= lunarday.day
     return jsonify({'Solarday': solarday_data,'Lunarday': lunarday_data,'Sexagenary_Cycle_Day':canchiday,'Sexagenary_Cycle_Year':canchiyear,'Solarterm Day': tietkhi,'BranchesDay':truc,'ZhugeLiang day':ZhugeLiangday,'Good_day':hoangdaoday,'Chinese_Zodiac_Compatibility':Chinese_Zodiac_Compatibility,'Twenty-Eight Lunar Mansions Day':nhithapbattu,
-                   'Goodhour':good_hour,'luckyDirection':{'Tai_than':taithan,'Hy_Than':Hythan},'NguyetKy':NguyetKy,'sevenkillstar':sevenkillstar})
+                   'Goodhour':good_hour,'luckyDirection':{'Tai_than':taithan,'Hy_Than':Hythan},'NguyetKy':NguyetKy,'sevenkillstar':sevenkillstar,'Tam_nuong':tamnuong,'Ly_sao':lysao})
 if __name__ == '__main__':
     app.run()   
