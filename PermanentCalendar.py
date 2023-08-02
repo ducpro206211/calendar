@@ -6,8 +6,6 @@ import pandas as pd
 def is_leap_year(year):
     # Kiểm tra xem một năm có phải là năm nhuận hay không
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
-
-
 def get_next_can_chi(year, month, day):
     dic_lucthaphoagiap = {
         1: 'Giáp Tý', 2: 'Ất Sửu', 3: 'Bính Dần', 4: 'Đinh Mão', 5: 'Mậu Thìn', 6: 'Kỷ Tỵ', 7: 'Canh Ngọ', 8: 'Tân Mùi',
@@ -43,7 +41,7 @@ def get_next_can_chi(year, month, day):
     # Lấy ngày Can Chi tiếp theo
     next_can_chi = dic_lucthaphoagiap[next_position]
     return next_can_chi
-    
+
 #Tính ngày hoàng/ hắc đạo #input là năm, tháng, ngày cần xem
 def goodday(year,month,day): 
  # convert lịch dương sang lịch âm và lấy tháng âm 
@@ -63,19 +61,18 @@ def goodday(year,month,day):
  monthlist = dict(zip(sort_list_from_index(giaplist,startgiapindex),daylist))
  hoangdaoday = tim_gia_tri(monthlist,canchi)
  return hoangdaoday
-    
+
 def tim_gia_tri(dic,chuoi): 
  for key in dic:
     if key in chuoi:
         return dic[key]
  else : return "nope"
-     
+
 def sort_list_from_index(lst, index):
     if index >= len(lst):
         return lst
     else:
         return lst[index:] + lst[:index]
-        
 # Hàm tính hoàng đạo theo lục minh khổng giáp #Input (year,month,day)
 def find_day_khongminh(year,month,day):
     solar = Solar(year, month,day)
@@ -94,7 +91,6 @@ def find_day_khongminh(year,month,day):
     index = lucgiapkhongminh.index(daystart)
     index_kiem_tra = (index + ngay_kiem_tra - 1) % len(lucgiapkhongminh)
     return lucgiapkhongminh[index_kiem_tra]
-    
 #Tính Thập nhị trực
 def TwelveBranches(year,month,day):
  tietkhi = get_solar_term(year,month,day)
@@ -124,7 +120,6 @@ def TwelveBranches(year,month,day):
         starttrucindex = trucindex[i]
  trucmonthlist = dict(zip(sort_list_from_index(giaptruclist,starttrucindex),thapnhitruc))
  return tim_gia_tri(trucmonthlist,diachi)
-    
 def get_solar_longitude(year, month, day):
     observer = ephem.Observer()
     observer.lat = '0'  
@@ -135,7 +130,7 @@ def get_solar_longitude(year, month, day):
     sun_longitude = sun.ra
     sun_longitude_deg = math.degrees(sun_longitude)
     return sun_longitude_deg
-#Tính toạ độ mặt trời   
+# Tỉnh tiết khí theo lịch dựa vào vị trí mặt trời
 def get_solar_term(year,month,day):
     solar_longitude_deg = get_solar_longitude(year, month, day)
     adjusted_longitude_deg = solar_longitude_deg  # Điều chỉnh toạ độ mặt trời
@@ -148,13 +143,13 @@ def get_solar_term(year,month,day):
     term_index = int((adjusted_longitude_deg) / 15) % 24 
 
     return terms[term_index]
-
-#Tính ngày nguyệt kỵ
+#Tính Nguyệt kỵ, là ngày mà mặt trăng đi qua vùng mới, gây năng lượng xấu đối với mọi việc   
 def NguyetKy(lunarday):
     if lunarday in [5,14,23]:
      return True
     else : 
      return False
+#Lấy Thiên Can
 def get_first_word(string):
     # Tách chuỗi bởi khoảng cách đầu tiên
     words = string.split(' ', 1)
@@ -164,8 +159,7 @@ def get_first_word(string):
         return words[0]
     else:
         return ''
-
-#Tính sao thất sát
+ #Tính ngày thất sát , là các ngày có những sao xấu mọi việc trong 108 sao       
 def sevenkillstar(year,month,day):
     canyear = get_first_word(tim_nam_can_chi(year))
     if canyear in ['Mậu','Quý']:
@@ -182,7 +176,7 @@ def sevenkillstar(year,month,day):
     if dia_day in listday:
         return True
     else : return False 
-        
+#Lấy Địa chi     
 def get_name_day(string):
     # Tách chuỗi bởi khoảng cách đầu tiên
     words = string.split(' ', 1)
@@ -192,6 +186,8 @@ def get_name_day(string):
         return words[1]
     else:
         return ''
+
+# chuyển năm thành năm can chi
 def tim_nam_can_chi(year):
     dic_lucthaphoagiap = {
         1: 'Giáp Tý', 2: 'Ất Sửu', 3: 'Bính Dần', 4: 'Đinh Mão', 5: 'Mậu Thìn', 6: 'Kỷ Tỵ', 7: 'Canh Ngọ', 8: 'Tân Mùi',
@@ -211,13 +207,15 @@ def tim_nam_can_chi(year):
     else:
         index = (40 + index_diff) % 60
     return dic_lucthaphoagiap[index]
+# Dựa theo ngày thiên can, sẽ có những tuổi xung khắc với ngày ngày , người ta quan niệm khắc nhau là không tốt
 def tuoixung(year,month,day):
-    df = pd.read_csv('xungtuoi.csv",header = None)
+    df = pd.read_csv("xungtuoi.csv",header = None)
     ngaycanchi = get_next_can_chi(year, month, day)
     result = df.loc[df[1] == ngaycanchi,3].values[0]
     return result
+ # Tính nhị thập bát tú (là 28 sao trong lịch phong thuỷ người xưa)   
 def nhithapbattu(year,month,day):
- df = pd.read_csv("/Users/oraichain/Downloads/thapnhibattu.csv",header = None)   
+ df = pd.read_csv("thapnhibattu.csv",header = None)   
  startindex = 0
  startday = datetime(2023,6,29)
  nowday = datetime(year,month,day)
@@ -247,6 +245,7 @@ def find_hour(year, month, day):
     row = df[df['Giờ'].str.contains(ten_con_giap)].iloc[0, 1:]
     filtered_dict = {col: value for col, value in row.items() if value.isupper()}
     return filtered_dict
+
 # Tính hướng tốt, hạc thần, Hỷ thần là 2 sao mang lại may mắn
 def Taithan(year,month,day):
     canday = get_first_word(get_next_can_chi(year,month,day))
@@ -265,6 +264,7 @@ def Taithan(year,month,day):
     elif canday in ['Quý']:
         Taithan = ['Tây Bắc']
     return Taithan
+
 def Hythan(year,month,day):
     canday = get_first_word(get_next_can_chi(year,month,day))
     if canday in ['Mậu','Quý']:
@@ -278,3 +278,17 @@ def Hythan(year,month,day):
     elif canday in ['Giáp','Kỷ']:
         Hythan = ['Hướng Đông Bắc, giờ Dần(3-5h sáng)']
     return Hythan
+
+# Kiểm tra ngày Ly sào(tiếg Hán là ngày rời tổ ) mang nghĩa xấu cho xây dựng nhà cửa   
+def lysao(year, month, day):
+    ngaycanchi = get_next_can_chi(year, month, day)
+    if ngaycanchi in ['Tân Mão','Mậu Thìn','Mậu Ngọ','Kỷ Dậu','Tân Dậu','Mậu Thân','Mậu Dần','Mậu Tý','Nhâm Thân','Kỷ Sửu','Quý Sửu','Bính Tuất','Nhâm Ngọ','Nhâm Tuất','Mậu Tuất','Quý Sửu','Tân Hợi','Kỷ Sửu','Quý Tỵ','Kỷ Tỵ','Tân Tỵ','Tân Hợi']:
+     return True
+    else : return False 
+# Kiểm tra ngày tam nương ( kỵ cho việc lớn)
+def tamnuong(lunarday):
+    if lunarday in [3,7,13,18,22,27]:
+        return True
+    else : return False
+
+
